@@ -34,6 +34,8 @@ var colPlusButton = document.getElementById('colPlusButton');
 
 var mazeButton = document.getElementById('mazeButton');
 
+// Display Rows and Cols
+
 function displayRowCol()
 {
 	document.getElementById('rowColDiv').innerHTML = "<p>Rows: " + rows + "</p><p>Columns: " + cols + "</p>";
@@ -75,8 +77,10 @@ var EdgeIndexArray;
 
 function displayZeroError()
 {
-	document.getElementById('mazeDiv').innerHTML = "<p>Both Rows and Columns should be greater than 0.</p>";
+	document.getElementById('mazeDiv').innerHTML = "<p id='zeroError'>Both Rows and Columns should be greater than 0.</p>";
 }
+
+// Display Maze
 
 function displayMaze()
 {
@@ -98,7 +102,7 @@ function displayHRow(row)
 	{
 		document.getElementById('mazeDiv').innerHTML += "+";
 		if(HWallArray[row][i] === 1)
-			document.getElementById('mazeDiv').innerHTML += "~~";
+			document.getElementById('mazeDiv').innerHTML += "&mdash;&mdash;";
 		else
 			document.getElementById('mazeDiv').innerHTML += "&nbsp;&nbsp;";
 	}
@@ -124,6 +128,8 @@ function displayVRow(row)
 	document.getElementById('mazeDiv').innerHTML += "</p>";
 }
 
+// Make Maze
+
 function initMaze()
 {
 	HWallArray = new Array(rows+1);
@@ -140,6 +146,14 @@ function initMaze()
 		VWallArray[i] = new Array(cols+1);
 		for(var j=0; j<cols+1; j++)
 			VWallArray[i][j] = 0;
+	}
+
+	PointsArray = new Array(rows);
+	for(var i=0; i<rows; i++)
+	{
+		PointsArray[i] = new Array(cols);
+		for(var j=0; j<cols; j++)
+			PointsArray[i][j] = {parA: i, parB: j, rank: 0};
 	}
 
 	edgeCount = (rows-1)*cols + rows*(cols-1);
@@ -168,9 +182,33 @@ function makeExits()
 	shuffleArray(HWallArray[rows]);
 }
 
+/*boolean function isSameSet(i, j, m, n)
+{
+	var parI = PointsArray[i][j].parA;
+	var parJ = PointsArray[i][j].parB;
+	return true;
+	/*point* parent = p->parent;
+	while(parent != parent->parent)
+		parent = parent->parent;
+	return parent;
+}*/
+
 function decideToBuild(edgeNum)
 {
-	
+	var numOfHWalls = (rows-1)*cols;
+	var i, j;
+
+	if(edgeNum < numOfHWalls)	// HWall
+	{
+		i = edgeNum/cols+1;
+		j = edgeNum%cols;
+	}
+	else						// VWall
+	{
+		edgeNum -= numOfHWalls;
+		i = edgeNum%rows;
+		j = edgeNum/rows+1;
+	}
 }
 
 mazeButton.onclick = function()

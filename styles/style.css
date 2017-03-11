@@ -47,6 +47,11 @@ p, li
 	font-family: 'Roboto Slab', serif;
 	text-align: left;
 }
+p[id="zeroError"]
+{
+	color: red;
+	font-style: italic;
+}
 p[id="start"]
 {
 	text-align: center;
