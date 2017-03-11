@@ -1,68 +1,3 @@
-// Set user
-
-var myHeading = document.querySelector('h1');
-var changeUserButton = document.getElementById('changeUserButton');
-
-function setUserName()
-{
-	var myName = prompt('Please enter your name.');
-	if(myName !== null)
-	{
-		localStorage.setItem('name', myName);
-		myHeading.textContent = 'Welcome, ' + myName + ", to Waverly Place!";
-	}
-}
-
-if(!localStorage.getItem('name'))
-{
-	setUserName();
-}
-else
-{
-	var storedName = localStorage.getItem('name');
-	myHeading.textContent = 'Welcome, ' + storedName + ", to Waverly Place!";
-}
-
-changeUserButton.onclick = function()
-{
- 	setUserName();
-}
-
-// Toggle image when clicked
-
-var myImage = document.querySelector('img');
-
-myImage.onclick = function()
-{
-	var mySrc = myImage.getAttribute('src');
-	if(mySrc === 'images/find-your-wei.png')
-	{
-		myImage.setAttribute ('src','images/lose-yourself.webp');
-	}
-	else
-	{
-		myImage.setAttribute ('src','images/find-your-wei.png');
-	}
-}
-
-// Shuffle Array
-
-var shuffleButton = document.getElementById('shuffleButton');
-var thisArray = ['A','B','C','D','E','F','G'];
-
-// display an array in a given div
-function displayArray(array, id)
-{
-	document.getElementById(id).innerHTML = "<ol>";
-
-	for(var i=0; i<array.length; i++)
-	{
-		document.getElementById(id).innerHTML += "<li>" + array[i] + "</li>";
-	}
-
-	document.getElementById(id).innerHTML += "</ol>";
-}
-
 // swap two elements at given indices in a given array
 function swap(array, i, j)
 {
@@ -83,14 +18,6 @@ function shuffleArray(array)
 		var randomIndex = Math.floor((Math.random() * array.length));
 		swap(array, i, randomIndex);
 	}
-}
-
-displayArray(thisArray,'arrayDiv');
-
-shuffleButton.onclick = function()
-{
-	shuffleArray(thisArray);
-	displayArray(thisArray,'arrayDiv');
 }
 
 // Make Maze
@@ -235,6 +162,12 @@ function makeBorder()
 	}
 }
 
+function makeExits()
+{
+	shuffleArray(HWallArray[0]);
+	shuffleArray(HWallArray[rows]);
+}
+
 function decideToBuild(edgeNum)
 {
 	
@@ -246,6 +179,7 @@ mazeButton.onclick = function()
 	{
 		initMaze();
 		makeBorder();
+		makeExits();
 		shuffleArray(EdgeIndexArray);
 		for(var i=0; i<EdgeIndexArray.length; i++)
 			decideToBuild(EdgeIndexArray[i]);

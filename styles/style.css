@@ -1,9 +1,9 @@
 html
 {
 	font-size: 10px;
-	background-color: #700ADA;
+	background-color: #9999FF;
 	color: white;
-	font-family: 'Playfair Display', serif;
+	font-family: 'Roboto Slab', serif;
 	text-align: center;
 }
 
@@ -11,9 +11,9 @@ body
 {
 	width: 1000px;
 	margin: 0 auto;
-	background-color: #000000;
+	background-color: black;
 	padding: 0 20px 20px 20px;
-	border: 5px solid #60DADA;
+	border: 5px solid white;
 }
 
 h1
@@ -21,19 +21,18 @@ h1
 	margin: 0;
 	padding: 20px 0; 
 	font-size: 60px;   
-	color: #60DADA;
-	text-shadow: 3px 3px 1px #700ADA;
+	color: #9999FF;
 }
 
 h2
 {
-	color: #60DADA;
+	color: #9999FF;
 	font-size: 32px;
 }
 
 h3
 {
-	color: #60DADA;
+	color: #9999FF;
 	font-size: 24px;
 }
 
@@ -59,14 +58,6 @@ p[id="end"]
 	color: red;
 }
 
-div[id="shuffleDiv"]
-{
-	margin: 0 auto;
-	width: 500px;
-	padding: 5px;
-	border: 2px dotted #700ADA;
-	text-align: center;
-}
 div[id="mazeDiv"]
 {
 	width: 500px;
@@ -81,32 +72,47 @@ img[src]
 {
 	display: block;
 	margin: 0 auto;
-	padding: 5px;
-}
-img[src]:hover
-{
 	padding: 0px;
-	border: 5px solid #60DADA;
+	border: 5px solid #9999FF;
 }
 
 a
 {
-	color: #700ADA;
+	color: #9999FF;
 }
 a:hover
 {
-	color: #60DADA;
+	color: #9999FF;
 }
 
 button
 {
-	color: #60DADA;
+	color: black;
+	border: 1px solid black;
+	border-radius: 6px;
 	margin: 5px;
 	font-family: 'Roboto Slab', serif;
-	background-color: black;
+	background-color: #9999FF;
+	font-size: 16px;
 }
 button:hover
 {
-	color: white;
-	background-color: #700ADA;
+	color: #9999FF;
+	border: 1px solid white;
+	background-color: black;
+}
+button[id="mazeButton"]
+{
+	color: #9999FF;
+	border: 2px solid white;
+	border-radius: 12px;
+	background-color: black;
+	font-size: 32px;
+	font-style: super bold;
+}
+button[id="mazeButton"]:hover
+{
+	color: black;
+	border: 2px solid #9999FF;
+	background-color: white;
 }
