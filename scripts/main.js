@@ -22,8 +22,8 @@ function shuffleArray(array)
 
 // Make Maze
 
-var rows = 0;
-var cols = 0;
+var rows = 4;
+var cols = 5;
 
 var edgeCount = 0;
 
@@ -38,7 +38,8 @@ var mazeButton = document.getElementById('mazeButton');
 
 function displayRowCol()
 {
-	document.getElementById('rowColDiv').innerHTML = "<p>Rows: " + rows + "</p><p>Columns: " + cols + "</p>";
+	document.getElementById('rowCount').innerHTML = rows;
+	document.getElementById('colCount').innerHTML = cols;
 }
 
 displayRowCol();
@@ -66,8 +67,11 @@ colMinusButton.onclick = function()
 }
 colPlusButton.onclick = function()
 {
-	cols++;
-	displayRowCol();
+	if(cols < 30)
+	{
+		cols++;
+		displayRowCol();
+	}
 }
 
 var HWallArray;

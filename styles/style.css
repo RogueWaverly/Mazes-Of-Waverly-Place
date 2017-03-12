@@ -45,7 +45,7 @@ p, li
 	font-size: 16px;
 	line-height: 1.5;
 	font-family: 'Roboto Slab', serif;
-	text-align: left;
+	text-align: center;
 }
 p[id="zeroError"]
 {
@@ -65,7 +65,7 @@ p[id="end"]
 
 div[id="mazeDiv"]
 {
-	width: 500px;
+	width: 900px;
 	margin: 0 auto;
 	padding: 5px;
 	font-size: 16px;
@@ -90,34 +90,48 @@ a:hover
 	color: #9999FF;
 }
 
+span
+{
+	font-size: 16px;
+}
+
 button
 {
-	color: black;
-	border: 1px solid black;
+	color: #9999FF;
+	border: 2px solid black;
 	border-radius: 6px;
 	margin: 5px;
 	font-family: 'Roboto Slab', serif;
-	background-color: #9999FF;
+	background-color: black;
 	font-size: 16px;
 }
 button:hover
 {
-	color: #9999FF;
-	border: 1px solid white;
-	background-color: black;
+	border: 2px solid #9999FF;
+}
+button:active
+{
+	color: black;
+	border: 2px solid #9999FF;
+	background-color: #9999FF;
 }
 button[id="mazeButton"]
 {
-	color: #9999FF;
-	border: 2px solid white;
+	color: black;
+	border: 3px solid #9999FF;
 	border-radius: 12px;
-	background-color: black;
+	background-color: #9999FF;
 	font-size: 32px;
 	font-style: super bold;
 }
 button[id="mazeButton"]:hover
 {
-	color: black;
-	border: 2px solid #9999FF;
+	border: 3px solid white;
 	background-color: white;
+}
+button[id="mazeButton"]:active
+{
+	color: #9999FF;
+	border: 3px solid #9999FF;
+	background-color: black;
 }
