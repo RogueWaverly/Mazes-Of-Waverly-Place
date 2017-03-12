@@ -137,7 +137,7 @@ function initMaze()
 	{
 		HWallArray[i] = new Array(cols);
 		for(var j=0; j<cols; j++)
-			HWallArray[i][j] = 0;
+			HWallArray[i][j] = 1;
 	}
 
 	VWallArray = new Array(rows);
@@ -145,7 +145,7 @@ function initMaze()
 	{
 		VWallArray[i] = new Array(cols+1);
 		for(var j=0; j<cols+1; j++)
-			VWallArray[i][j] = 0;
+			VWallArray[i][j] = 1;
 	}
 
 	PointsArray = new Array(rows);
@@ -162,36 +162,45 @@ function initMaze()
 		EdgeIndexArray[i] = i;
 }
 
-function makeBorder()
+function makeExits()
 {
-	for(var i=0; i<cols-1; i++)
-	{
-		HWallArray[0][i+1] = 1;
-		HWallArray[rows][i] = 1;
-	}
-	for(var i=0; i<rows; i++)
-	{
-		VWallArray[i][0] = 1;
-		VWallArray[i][cols] = 1;
-	}
+	HWallArray[0][0] = 0;
+	HWallArray[rows][cols-1] = 0;
 }
 
-function makeExits()
+function shuffleExits()
 {
 	shuffleArray(HWallArray[0]);
 	shuffleArray(HWallArray[rows]);
 }
 
-/*boolean function isSameSet(i, j, m, n)
+function findParent(p)
 {
-	var parI = PointsArray[i][j].parA;
-	var parJ = PointsArray[i][j].parB;
-	return true;
-	/*point* parent = p->parent;
-	while(parent != parent->parent)
-		parent = parent->parent;
+	var parent = {i: p.parA, j: p.parB};
+	while(PointsArray[parent.i][parent.j] != PointsArray[PointsArray[parent.i][parent.j].parA][PointsArray[parent.i][parent.j].parB])
+		parent = {i: PointsArray[parent.i][parent.j].parA, j: PointsArray[parent.i][parent.j].parB};
 	return parent;
-}*/
+}
+
+function joinSets(a, b)
+{
+	if(PointsArray[a.i][a.j].rank < PointsArray[b.i][b.j].rank)
+	{
+		PointsArray[a.i][a.j].parA = b.i;
+		PointsArray[a.i][a.j].parB = b.j;
+	}
+	else if(PointsArray[a.i][a.j].rank > PointsArray[b.i][b.j].rank)
+	{
+		PointsArray[b.i][b.j].parA = a.i;
+		PointsArray[b.i][b.j].parB = a.j;
+	}
+	else
+	{
+		PointsArray[a.i][a.j].parA = b.i;
+		PointsArray[a.i][a.j].parB = b.j;
+		PointsArray[b.i][b.j].rank++;
+	}
+}
 
 function decideToBuild(edgeNum)
 {
@@ -200,14 +209,28 @@ function decideToBuild(edgeNum)
 
 	if(edgeNum < numOfHWalls)	// HWall
 	{
-		i = edgeNum/cols+1;
+		i = Math.floor(edgeNum/cols)+1;
 		j = edgeNum%cols;
+		var topSetParent = findParent(PointsArray[i-1][j]);
+		var botSetParent = findParent(PointsArray[i][j]);
+		if(topSetParent.i !== botSetParent.i || topSetParent.j !== botSetParent.j)
+		{
+			joinSets(topSetParent, botSetParent);
+			HWallArray[i][j] = 0;
+		}
 	}
 	else						// VWall
 	{
 		edgeNum -= numOfHWalls;
 		i = edgeNum%rows;
-		j = edgeNum/rows+1;
+		j = Math.floor(edgeNum/rows)+1;
+		var leftSetParent = findParent(PointsArray[i][j-1]);
+		var rightSetParent = findParent(PointsArray[i][j]);
+		if(leftSetParent.i !== rightSetParent.i || leftSetParent.j !== rightSetParent.j)
+		{
+			joinSets(leftSetParent, rightSetParent);
+			VWallArray[i][j] = 0;
+		}
 	}
 }
 
@@ -216,8 +239,8 @@ mazeButton.onclick = function()
 	if(rows > 0 && cols > 0)
 	{
 		initMaze();
-		makeBorder();
 		makeExits();
+		shuffleExits();
 		shuffleArray(EdgeIndexArray);
 		for(var i=0; i<EdgeIndexArray.length; i++)
 			decideToBuild(EdgeIndexArray[i]);
