@@ -103,7 +103,7 @@ button
 	margin: 5px;
 	font-family: 'Roboto Slab', serif;
 	background-color: black;
-	font-size: 16px;
+	font-size: 20px;
 }
 button:hover
 {
@@ -115,21 +115,20 @@ button:active
 	border: 2px solid #9999FF;
 	background-color: #9999FF;
 }
-button[id="mazeButton"]
+button[class="bigButton"]
 {
 	color: black;
 	border: 3px solid #9999FF;
 	border-radius: 12px;
 	background-color: #9999FF;
 	font-size: 32px;
-	font-style: super bold;
 }
-button[id="mazeButton"]:hover
+button[class="bigButton"]:hover
 {
 	border: 3px solid white;
 	background-color: white;
 }
-button[id="mazeButton"]:active
+button[class="bigButton"]:active
 {
 	color: #9999FF;
 	border: 3px solid #9999FF;

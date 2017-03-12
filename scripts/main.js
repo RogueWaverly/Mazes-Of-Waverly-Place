@@ -79,6 +79,10 @@ var VWallArray;
 var PointsArray;
 var EdgeIndexArray;
 
+var PlayerPos = {i:0, j:0};
+
+var isPlaying = false;
+
 function displayZeroError()
 {
 	document.getElementById('mazeDiv').innerHTML = "<p id='zeroError'>Both Rows and Columns should be greater than 0.</p>";
@@ -123,7 +127,10 @@ function displayVRow(row)
 		document.getElementById('mazeDiv').innerHTML += "&nbsp;";
 	for(var i=1; i<cols+1; i++)
 	{
-		document.getElementById('mazeDiv').innerHTML += "&nbsp;&nbsp;";
+		if(isPlaying && PlayerPos.i === row && PlayerPos.j === i-1)
+			document.getElementById('mazeDiv').innerHTML += "&rsaquo;&lsaquo;";
+		else
+			document.getElementById('mazeDiv').innerHTML += "&nbsp;&nbsp;";
 		if(VWallArray[row][i] === 1)
 			document.getElementById('mazeDiv').innerHTML += "|";
 		else
@@ -174,7 +181,11 @@ function makeExits()
 
 function shuffleExits()
 {
+	PlayerPos.i = 0;
 	shuffleArray(HWallArray[0]);
+	for(var i=0; i<cols; i++)
+		if(HWallArray[0][i] === 0)
+			PlayerPos.j = i;
 	shuffleArray(HWallArray[rows]);
 }
 
@@ -242,6 +253,7 @@ mazeButton.onclick = function()
 {
 	if(rows > 0 && cols > 0)
 	{
+		isPlaying = true;
 		initMaze();
 		makeExits();
 		shuffleExits();
@@ -253,5 +265,51 @@ mazeButton.onclick = function()
 	else
 	{
 		displayZeroError();
+		isPlaying = false;
 	}
+}
+
+// Play Maze
+
+window.onkeyup = function(e)
+{
+	var key = e.keyCode ? e.keyCode : e.which;
+	if(isPlaying)
+		if(key == 65 || key == 37)			// A - left
+		{
+			if(VWallArray[PlayerPos.i][PlayerPos.j] === 0)
+			{
+				PlayerPos.j--;
+				displayMaze();
+			}
+		}
+		else if(key == 87 || key == 38)		// W - up
+		{
+			if(PlayerPos.i > 0 && HWallArray[PlayerPos.i][PlayerPos.j] === 0)
+			{
+				PlayerPos.i--;
+				displayMaze();
+			}
+		}
+		else if(key == 68 || key == 39)		// S - right
+		{
+			if(VWallArray[PlayerPos.i][PlayerPos.j+1] === 0)
+			{
+				PlayerPos.j++;
+				displayMaze();
+			}
+		}
+		else if(key == 83 || key == 40)		// S - down
+		{
+			if(HWallArray[PlayerPos.i+1][PlayerPos.j] === 0)
+			{
+				PlayerPos.i++;
+				displayMaze();
+				if(PlayerPos.i === rows)
+				{
+					isPlaying = false;
+					document.getElementById('mazeDiv').innerHTML+="<p>You Won!</p>";
+				}
+			}
+		}
 }
