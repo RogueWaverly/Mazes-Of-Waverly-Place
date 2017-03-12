@@ -78,6 +78,7 @@ var HWallArray;
 var VWallArray;
 var PointsArray;
 var EdgeIndexArray;
+var MazeArray;
 
 var PlayerPos = {i:0, j:0};
 
@@ -93,62 +94,66 @@ function displayZeroError()
 function displayMaze()
 {
 	document.getElementById('mazeDiv').innerHTML = "<p id='start'>Start</p>";
-	displayHRow(0);
-	for(var i=0; i<rows; i++)
+	document.getElementById('mazeDiv').innerHTML += MazeArray[0];
+	for(var i=1; i<2*rows+1; i++)
 	{
-		displayVRow(i);
-		displayHRow(i+1);
+		document.getElementById('mazeDiv').innerHTML += MazeArray[i];
 	}
 	document.getElementById('mazeDiv').innerHTML += "<p id='end'>End</p>";
 }
 
-function displayHRow(row)
+function updateHRow(row)
 {
-	document.getElementById('mazeDiv').innerHTML += "<p>";
+	MazeArray[2*row] = "<p class='mazeRow'>";
 	
 	for(var i=0; i<cols; i++)
 	{
-		document.getElementById('mazeDiv').innerHTML += "+";
+		MazeArray[2*row] += "+";
 		if(HWallArray[row][i] === 1)
-			document.getElementById('mazeDiv').innerHTML += "&mdash;&mdash;";
+			MazeArray[2*row] += "&mdash;&mdash;";
 		else
-			document.getElementById('mazeDiv').innerHTML += "&nbsp;&nbsp;";
+			MazeArray[2*row] += "&nbsp;&nbsp;";
 	}
-	document.getElementById('mazeDiv').innerHTML += "+</p>";
+	MazeArray[2*row] += "+</p>";
 }
 
-function displayVRow(row)
+function updateVRow(row)
 {
-	document.getElementById('mazeDiv').innerHTML += "<p>";
+	MazeArray[2*row+1] = "<p class='mazeRow'>";
 	
 	if(VWallArray[row][0] === 1)
-		document.getElementById('mazeDiv').innerHTML += "|";
+		MazeArray[2*row+1] += "|";
 	else
-		document.getElementById('mazeDiv').innerHTML += "&nbsp;";
+		MazeArray[2*row+1] += "&nbsp;";
 	for(var i=1; i<cols+1; i++)
 	{
 		if(isPlaying && PlayerPos.i === row && PlayerPos.j === i-1)
-			document.getElementById('mazeDiv').innerHTML += "&rsaquo;&lsaquo;";
+			MazeArray[2*row+1] += "&rsaquo;&lsaquo;";
 		else
-			document.getElementById('mazeDiv').innerHTML += "&nbsp;&nbsp;";
+			MazeArray[2*row+1] += "&nbsp;&nbsp;";
 		if(VWallArray[row][i] === 1)
-			document.getElementById('mazeDiv').innerHTML += "|";
+			MazeArray[2*row+1] += "|";
 		else
-			document.getElementById('mazeDiv').innerHTML += "&nbsp;";
+			MazeArray[2*row+1] += "&nbsp;";
 	}
-	document.getElementById('mazeDiv').innerHTML += "</p>";
+	MazeArray[2*row+1] += "</p>";
 }
 
 // Make Maze
 
 function initMaze()
 {
+	MazeArray = new Array(2*rows+1);
+	for(var i=0; i<2*rows+1; i++)
+		MazeArray[i] = "";
+
 	HWallArray = new Array(rows+1);
 	for(var i=0; i<rows+1; i++)
 	{
 		HWallArray[i] = new Array(cols);
 		for(var j=0; j<cols; j++)
 			HWallArray[i][j] = 1;
+		updateHRow(i);
 	}
 
 	VWallArray = new Array(rows);
@@ -157,6 +162,7 @@ function initMaze()
 		VWallArray[i] = new Array(cols+1);
 		for(var j=0; j<cols+1; j++)
 			VWallArray[i][j] = 1;
+		updateVRow(i);
 	}
 
 	PointsArray = new Array(rows);
@@ -187,6 +193,8 @@ function shuffleExits()
 		if(HWallArray[0][i] === 0)
 			PlayerPos.j = i;
 	shuffleArray(HWallArray[rows]);
+	updateHRow(0);
+	updateHRow(rows);
 }
 
 function findParent(p)
@@ -232,6 +240,7 @@ function decideToBuild(edgeNum)
 		{
 			joinSets(topSetParent, botSetParent);
 			HWallArray[i][j] = 0;
+			updateHRow(i);
 		}
 	}
 	else						// VWall
@@ -245,6 +254,7 @@ function decideToBuild(edgeNum)
 		{
 			joinSets(leftSetParent, rightSetParent);
 			VWallArray[i][j] = 0;
+			updateVRow(i);
 		}
 	}
 }
@@ -275,41 +285,68 @@ window.onkeyup = function(e)
 {
 	var key = e.keyCode ? e.keyCode : e.which;
 	if(isPlaying)
-		if(key == 65 || key == 37)			// A - left
+		switch(key)
 		{
-			if(VWallArray[PlayerPos.i][PlayerPos.j] === 0)
+			case 65:
+			case 37:			// A - left
 			{
-				PlayerPos.j--;
-				displayMaze();
-			}
-		}
-		else if(key == 87 || key == 38)		// W - up
-		{
-			if(PlayerPos.i > 0 && HWallArray[PlayerPos.i][PlayerPos.j] === 0)
-			{
-				PlayerPos.i--;
-				displayMaze();
-			}
-		}
-		else if(key == 68 || key == 39)		// S - right
-		{
-			if(VWallArray[PlayerPos.i][PlayerPos.j+1] === 0)
-			{
-				PlayerPos.j++;
-				displayMaze();
-			}
-		}
-		else if(key == 83 || key == 40)		// S - down
-		{
-			if(HWallArray[PlayerPos.i+1][PlayerPos.j] === 0)
-			{
-				PlayerPos.i++;
-				displayMaze();
-				if(PlayerPos.i === rows)
+				e.preventDefault();
+				if(VWallArray[PlayerPos.i][PlayerPos.j] === 0)
 				{
-					isPlaying = false;
-					document.getElementById('mazeDiv').innerHTML+="<p>You Won!</p>";
+					PlayerPos.j--;
+					updateVRow(PlayerPos.i);
+					displayMaze();
 				}
+				break;
+			}
+			case 87:
+			case 38:			// W - up
+			{
+				e.preventDefault();
+				if(PlayerPos.i > 0 && HWallArray[PlayerPos.i][PlayerPos.j] === 0)
+				{
+					PlayerPos.i--;
+					updateVRow(PlayerPos.i+1);
+					updateVRow(PlayerPos.i);
+					displayMaze();
+				}
+				break;
+			}
+			case 68:
+			case 39:			// S - right
+			{
+				e.preventDefault();
+				if(VWallArray[PlayerPos.i][PlayerPos.j+1] === 0)
+				{
+					PlayerPos.j++;
+					updateVRow(PlayerPos.i);
+					displayMaze();
+				}
+				break;
+			}
+			case 83:
+			case 40:			// S - down
+			{
+				e.preventDefault();
+				if(HWallArray[PlayerPos.i+1][PlayerPos.j] === 0)
+				{
+					PlayerPos.i++;
+					if(PlayerPos.i !== rows)
+					{
+						updateVRow(PlayerPos.i);
+						updateVRow(PlayerPos.i-1);
+						displayMaze();
+					}
+					else
+					{
+						isPlaying = false;
+						updateVRow(PlayerPos.i-1);
+						displayMaze();
+						document.getElementById('mazeDiv').innerHTML+="<h2 id='youWon'>You Won!</h2>";
+					}
+				}
+				break;
 			}
 		}
+		
 }
