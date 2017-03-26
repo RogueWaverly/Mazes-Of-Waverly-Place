@@ -71,8 +71,8 @@ p[id="end"]
 }
 p[class="mazeRow"]
 {
-	width: 900px;
 	margin: 0 auto;
+	width: 900px;
 	padding: 0px;
 	color: white;
 	font-size: 16px;

@@ -25,10 +25,15 @@ function shuffleArray(array)
 var rows = 4;
 var cols = 5;
 
+var rowMax = 31;
+var colMax = 30;
+
+var chW = 4;
+var chH = 5;
+
 var edgeCount = 0;
 
 var rowMinusButton = document.getElementById('rowMinusButton');
-rowMinusButton.disabled = true;
 var rowPlusButton = document.getElementById('rowPlusButton');
 var colMinusButton = document.getElementById('colMinusButton');
 var colPlusButton = document.getElementById('colPlusButton');
@@ -49,45 +54,45 @@ displayRowCol();
 
 rowMinusButton.onclick = function()
 {
-	if(rows > 4)
+	if(rows > 1)
 	{
 		rows--;
 		rowPlusButton.disabled = false;
 		displayRowCol();
-		if(rows === 4)
+		if(rows === 1)
 			rowMinusButton.disabled = true;
 	}	
 }
 rowPlusButton.onclick = function()
 {
-	if(rows < 30)
+	if(rows < rowMax)
 	{
 		rows++;
 		rowMinusButton.disabled = false;
 		displayRowCol();
-		if(rows === 30)
+		if(rows === rowMax)
 			rowPlusButton.disabled = true;
 	}
 }
 colMinusButton.onclick = function()
 {
-	if(cols > 3)
+	if(cols > 1)
 	{
 		cols--;
 		colPlusButton.disabled = false;
 		displayRowCol();
-		if(cols === 3)
+		if(cols === 1)
 			colMinusButton.disabled = true;
 	}
 }
 colPlusButton.onclick = function()
 {
-	if(cols < 30)
+	if(cols < colMax)
 	{
 		cols++;
 		colMinusButton.disabled = false;
 		displayRowCol();
-		if(cols === 30)
+		if(cols === colMax)
 			colPlusButton.disabled = true;
 	}
 }
@@ -104,17 +109,17 @@ var isPlaying = false;
 
 function isInputValid()
 {
-	inputText = document.getElementById('inputText').value;
-	if(inputText.length > 14)
+	inputText = document.getElementById('inputText').value.toUpperCase();
+	if(inputText.length > Math.floor(colMax/(chW+1))-1)
 		return false;
 	for(var i=0; i<inputText.length; i++)
-		if(inputText.charAt(i) > '9' || inputText.charAt(i) < '0')
+		if(!(inputText.charAt(i)>='0' && inputText.charAt(i)<='9') && !(inputText.charAt(i)>='A' && inputText.charAt(i)<='Z'))
 			return false;
 	return true;
 }
 function displayInputError()
 {
-	document.getElementById('mazeDiv').innerHTML = "<p class='error'>Input should only contain digits and have at most 14 characters.</p>";
+	document.getElementById('mazeDiv').innerHTML = "<p class='error'>Input should only contain letters and digits and have at most " + (Math.ceil(colMax/(chW+1))-1) + " characters.</p>";
 }
 
 // Display Maze
@@ -175,11 +180,17 @@ function updateVRow(row)
 
 function initMaze()
 {
-	if(cols < 2*inputText.length+1)
+	if(inputText.length > 0 && cols < (chW+1)*inputText.length+1)
 	{
-		cols = 2*inputText.length+1;
-		displayRowCol();
+		cols = (chW+1)*inputText.length+1;
+		colMinusButton.disabled = false;
 	}
+	if(inputText.length > 0 && rows < chH+2)
+	{
+		rows = chH+2;
+		rowMinusButton.disabled = false;
+	}
+	displayRowCol();
 
 	MazeArray = new Array(2*rows+1);
 	for(var i=0; i<2*rows+1; i++)
@@ -263,93 +274,319 @@ function joinSets(a, b)
 
 function initInput()
 {
-	var r0 = Math.floor(rows/2)-1;
+	var r0 = Math.floor((rows-1)/2)-Math.floor(chH/2);
 	var r1 = r0+1;
 	var r2 = r1+1;
+	var r3 = r2+1;
+	var r4 = r3+1;
+	var r5 = r4+1;
 	for(var i=0; i<inputText.length; i++)
 	{
-		var c0 = Math.floor((cols-2*inputText.length-1)/2)+1+2*i;
+		var c0 = Math.floor((cols-(chW+1)*inputText.length-1)/2)+1+(chW+1)*i;
 		var c1 = c0+1;
 		var c2 = c1+1;
+		var c3 = c2+1;
+		var c4 = c3+1;
 		switch(inputText.charAt(i))
 		{
 			case '0':
-				HWallArray[r0][c0] = 2;	// top HWall
-				HWallArray[r2][c0] = 2;	// bot HWall
+				
+				HWallArray[r0][c1] = 2;	// top HWall
+				HWallArray[r0][c2] = 2;
+				HWallArray[r1][c0] = 2;
+				HWallArray[r1][c1] = 2;
+				HWallArray[r1][c2] = 2;
+				HWallArray[r1][c3] = 2;
+				HWallArray[r4][c0] = 2;	// bot HWall
+				HWallArray[r4][c1] = 2;
+				HWallArray[r4][c2] = 2;
+				HWallArray[r4][c3] = 2;
+				HWallArray[r5][c1] = 2;
+				HWallArray[r5][c2] = 2;
 
-				VWallArray[r0][c0] = 2;	// topL VWall
-				VWallArray[r0][c1] = 2;	// topR VWall
-				VWallArray[r1][c0] = 2;	// botL VWall
-				VWallArray[r1][c1] = 2;	// botR VWall
+				VWallArray[r0][c1] = 2;	// topL VWall
+				VWallArray[r0][c3] = 2;	// topR VWall
+				VWallArray[r1][c0] = 2;
+				VWallArray[r1][c1] = 2;
+				VWallArray[r1][c3] = 2;
+				VWallArray[r1][c4] = 2;
+				VWallArray[r2][c0] = 2;
+				VWallArray[r2][c1] = 2;
+				VWallArray[r2][c3] = 2;
+				VWallArray[r2][c4] = 2;
+				VWallArray[r3][c0] = 2;
+				VWallArray[r3][c1] = 2;
+				VWallArray[r3][c3] = 2;
+				VWallArray[r3][c4] = 2;
+				VWallArray[r4][c1] = 2;	// botL VWall
+				VWallArray[r4][c3] = 2;	// botR VWall
 				break;
 			case '1':
-				VWallArray[r0][c1] = 2;	// topR VWall
-				VWallArray[r1][c1] = 2;	// botR VWall
+				HWallArray[r0][c2] = 2;
+				HWallArray[r1][c1] = 2;
+				HWallArray[r2][c1] = 2;
+				HWallArray[r4][c0] = 2;	// bot HWall
+				HWallArray[r4][c1] = 2;
+				HWallArray[r4][c3] = 2;
+				HWallArray[r5][c0] = 2;
+				HWallArray[r5][c1] = 2;
+				HWallArray[r5][c2] = 2;
+				HWallArray[r5][c3] = 2;
+
+				VWallArray[r0][c2] = 2;
+				VWallArray[r0][c3] = 2;	// topR VWall
+				VWallArray[r1][c1] = 2;
+				VWallArray[r1][c3] = 2;
+				VWallArray[r2][c2] = 2;
+				VWallArray[r2][c3] = 2;
+				VWallArray[r3][c2] = 2;
+				VWallArray[r3][c3] = 2;
+				VWallArray[r4][c0] = 2;
+				VWallArray[r4][c4] = 2;	// botR VWall
 				break;
 			case '2':
 				HWallArray[r0][c0] = 2;	// top HWall
-				HWallArray[r1][c0] = 2;	// mid HWall
-				HWallArray[r2][c0] = 2;	// bot HWall
+				HWallArray[r0][c1] = 2;
+				HWallArray[r0][c2] = 2;
+				HWallArray[r0][c3] = 2;
+				HWallArray[r1][c0] = 2;
+				HWallArray[r1][c1] = 2;
+				HWallArray[r1][c2] = 2;
+				HWallArray[r2][c1] = 2;	// mid HWall
+				HWallArray[r2][c2] = 2;
+				HWallArray[r3][c0] = 2;
+				HWallArray[r3][c1] = 2;
+				HWallArray[r3][c2] = 2;
+				HWallArray[r3][c3] = 2;
+				HWallArray[r4][c1] = 2;	// bot HWall
+				HWallArray[r4][c2] = 2;
+				HWallArray[r4][c3] = 2;
+				HWallArray[r5][c0] = 2;
+				HWallArray[r5][c1] = 2;
+				HWallArray[r5][c2] = 2;
+				HWallArray[r5][c3] = 2;
 
-				VWallArray[r0][c1] = 2;	// topR VWall
-				VWallArray[r1][c0] = 2;	// botL VWall
+				VWallArray[r0][c0] = 2;
+				VWallArray[r0][c4] = 2;	// topR VWall
+				VWallArray[r1][c3] = 2;
+				VWallArray[r1][c4] = 2;
+				VWallArray[r2][c1] = 2;
+				VWallArray[r2][c4] = 2;
+				VWallArray[r3][c0] = 2;
+				VWallArray[r3][c1] = 2;
+				VWallArray[r4][c0] = 2;	// botL VWall
+				VWallArray[r4][c4] = 2;
 				break;
 			case '3':
-				HWallArray[r0][c0] = 2;	// top HWall
-				HWallArray[r1][c0] = 2;	// mid HWall
-				HWallArray[r2][c0] = 2;	// bot HWall
+				HWallArray[r0][c1] = 2;	// top HWall
+				HWallArray[r0][c2] = 2;
+				HWallArray[r1][c0] = 2;
+				HWallArray[r1][c1] = 2;
+				HWallArray[r1][c2] = 2;
+				HWallArray[r1][c3] = 2;
+				HWallArray[r2][c0] = 2;	// mid HWall
+				HWallArray[r2][c2] = 2;
+				HWallArray[r3][c0] = 2;
+				HWallArray[r3][c2] = 2;
+				HWallArray[r4][c0] = 2;	// bot HWall
+				HWallArray[r4][c1] = 2;
+				HWallArray[r4][c2] = 2;
+				HWallArray[r4][c3] = 2;
+				HWallArray[r5][c1] = 2;
+				HWallArray[r5][c2] = 2;
 
-				VWallArray[r0][c1] = 2;	// topR VWall
-				VWallArray[r1][c1] = 2;	// botR VWall
+				VWallArray[r0][c1] = 2;
+				VWallArray[r0][c3] = 2;	// topR VWall
+				VWallArray[r1][c0] = 2;
+				VWallArray[r1][c1] = 2;
+				VWallArray[r1][c3] = 2;
+				VWallArray[r1][c4] = 2;
+				VWallArray[r2][c2] = 2;
+				VWallArray[r2][c4] = 2;
+				VWallArray[r3][c0] = 2;
+				VWallArray[r3][c1] = 2;
+				VWallArray[r3][c3] = 2;
+				VWallArray[r3][c4] = 2;
+				VWallArray[r4][c1] = 2;
+				VWallArray[r4][c3] = 2;	// botR VWall
 				break;
 			case '4':
-				HWallArray[r1][c0] = 2;	// mid HWall
+				HWallArray[r0][c0] = 2;
+				HWallArray[r0][c3] = 2;
+				HWallArray[r2][c1] = 2;
+				HWallArray[r2][c2] = 2;
+				HWallArray[r3][c0] = 2;	// mid HWall
+				HWallArray[r3][c1] = 2;
+				HWallArray[r3][c2] = 2;
+				HWallArray[r5][c3] = 2;
 
 				VWallArray[r0][c0] = 2;	// topL VWall
-				VWallArray[r0][c1] = 2;	// topR VWall
-				VWallArray[r1][c1] = 2;	// botR VWall
+				VWallArray[r0][c1] = 2;
+				VWallArray[r0][c3] = 2;	// topR VWall
+				VWallArray[r0][c4] = 2;
+				VWallArray[r1][c0] = 2;
+				VWallArray[r1][c1] = 2;
+				VWallArray[r1][c3] = 2;
+				VWallArray[r1][c4] = 2;
+				VWallArray[r2][c0] = 2;
+				VWallArray[r2][c4] = 2;
+				VWallArray[r3][c3] = 2;	// botR VWall
+				VWallArray[r3][c4] = 2;
+				VWallArray[r4][c3] = 2;
+				VWallArray[r4][c4] = 2;
 				break;
 			case '5':
 				HWallArray[r0][c0] = 2;	// top HWall
-				HWallArray[r1][c0] = 2;	// mid HWall
-				HWallArray[r2][c0] = 2;	// bot HWall
+				HWallArray[r0][c1] = 2;
+				HWallArray[r0][c2] = 2;
+				HWallArray[r0][c3] = 2;
+				HWallArray[r1][c1] = 2;
+				HWallArray[r1][c2] = 2;
+				HWallArray[r1][c3] = 2;
+				HWallArray[r2][c1] = 2;	// mid HWall
+				HWallArray[r2][c2] = 2;
+				HWallArray[r2][c3] = 2;
+				HWallArray[r3][c0] = 2;
+				HWallArray[r3][c1] = 2;
+				HWallArray[r3][c2] = 2;
+				HWallArray[r4][c0] = 2;	// bot HWall
+				HWallArray[r4][c1] = 2;
+				HWallArray[r4][c2] = 2;
+				HWallArray[r4][c3] = 2;
+				HWallArray[r5][c0] = 2;
+				HWallArray[r5][c1] = 2;
+				HWallArray[r5][c2] = 2;
 
-				VWallArray[r0][c0] = 2;	// topL VWall
-				VWallArray[r1][c1] = 2;	// botR VWall
+				VWallArray[r0][c0] = 2;
+				VWallArray[r0][c4] = 2;	// topR VWall
+				VWallArray[r1][c0] = 2;
+				VWallArray[r1][c1] = 2;
+				VWallArray[r2][c0] = 2;
+				VWallArray[r2][c4] = 2;
+				VWallArray[r3][c3] = 2;
+				VWallArray[r3][c4] = 2;
+				VWallArray[r4][c0] = 2;	// botL VWall
+				VWallArray[r4][c3] = 2;
 				break;
 			case '6':
-				HWallArray[r0][c0] = 2;	// top HWall
-				HWallArray[r1][c0] = 2;	// mid HWall
-				HWallArray[r2][c0] = 2;	// bot HWall
+				HWallArray[r0][c1] = 2;	// top HWall
+				HWallArray[r0][c2] = 2;
+				HWallArray[r0][c3] = 2;
+				HWallArray[r1][c0] = 2;
+				HWallArray[r1][c1] = 2;
+				HWallArray[r1][c2] = 2;
+				HWallArray[r1][c3] = 2;
+				HWallArray[r2][c1] = 2;	// mid HWall
+				HWallArray[r2][c2] = 2;
+				HWallArray[r2][c3] = 2;
+				HWallArray[r3][c1] = 2;
+				HWallArray[r3][c2] = 2;
+				HWallArray[r4][c1] = 2;	// bot HWall
+				HWallArray[r4][c2] = 2;
+				HWallArray[r5][c0] = 2;
+				HWallArray[r5][c1] = 2;
+				HWallArray[r5][c2] = 2;
+				HWallArray[r5][c3] = 2;
 
-				VWallArray[r0][c0] = 2;	// topL VWall
-				VWallArray[r1][c0] = 2;	// botL VWall
-				VWallArray[r1][c1] = 2;	// botR VWall
+				VWallArray[r0][c1] = 2;
+				VWallArray[r0][c4] = 2;	// topR VWall
+				VWallArray[r1][c0] = 2;
+				VWallArray[r1][c1] = 2;
+				VWallArray[r2][c0] = 2;
+				VWallArray[r2][c4] = 2;
+				VWallArray[r3][c0] = 2;
+				VWallArray[r3][c1] = 2;
+				VWallArray[r3][c3] = 2;
+				VWallArray[r3][c4] = 2;
+				VWallArray[r4][c0] = 2;	// botL VWall
+				VWallArray[r4][c4] = 2;
 				break;
 			case '7':
 				HWallArray[r0][c0] = 2;	// top HWall
+				HWallArray[r0][c1] = 2;
+				HWallArray[r0][c2] = 2;
+				HWallArray[r0][c3] = 2;
+				HWallArray[r1][c0] = 2;
+				HWallArray[r1][c1] = 2;
+				HWallArray[r1][c2] = 2;
+				HWallArray[r5][c3] = 2;
 
-				VWallArray[r0][c1] = 2;	// topR VWall
-				VWallArray[r1][c1] = 2;	// botR VWall
+				VWallArray[r0][c0] = 2;	// topR VWall
+				VWallArray[r0][c4] = 2;
+				VWallArray[r1][c3] = 2;	// botR VWall
+				VWallArray[r1][c4] = 2;
+				VWallArray[r2][c3] = 2;
+				VWallArray[r2][c4] = 2;
+				VWallArray[r3][c3] = 2;
+				VWallArray[r3][c4] = 2;
+				VWallArray[r4][c3] = 2;
+				VWallArray[r4][c4] = 2;
 				break;
 			case '8':
-				HWallArray[r0][c0] = 2;	// top HWall
-				HWallArray[r1][c0] = 2;	// mid HWall
-				HWallArray[r2][c0] = 2;	// bot HWall
+				HWallArray[r0][c0] = 2;
+				HWallArray[r0][c1] = 2;	// top HWall
+				HWallArray[r0][c2] = 2;
+				HWallArray[r0][c3] = 2;
+				HWallArray[r1][c1] = 2;
+				HWallArray[r1][c2] = 2;
+				HWallArray[r2][c1] = 2;	// mid HWall
+				HWallArray[r2][c2] = 2;
+				HWallArray[r3][c1] = 2;
+				HWallArray[r3][c2] = 2;
+				HWallArray[r4][c1] = 2;	// bot HWall
+				HWallArray[r4][c2] = 2;
+				HWallArray[r5][c0] = 2;
+				HWallArray[r5][c1] = 2;
+				HWallArray[r5][c2] = 2;
+				HWallArray[r5][c3] = 2;
 
-				VWallArray[r0][c0] = 2;	// topL VWall
-				VWallArray[r0][c1] = 2;	// topR VWall
-				VWallArray[r1][c0] = 2;	// botL VWall
-				VWallArray[r1][c1] = 2;	// botR VWall
+				VWallArray[r0][c0] = 2;
+				VWallArray[r0][c4] = 2;	// topR VWall
+				VWallArray[r1][c0] = 2;
+				VWallArray[r1][c1] = 2;
+				VWallArray[r1][c3] = 2;
+				VWallArray[r1][c4] = 2;
+				VWallArray[r2][c0] = 2;
+				VWallArray[r2][c4] = 2;
+				VWallArray[r3][c0] = 2;
+				VWallArray[r3][c1] = 2;
+				VWallArray[r3][c3] = 2;
+				VWallArray[r3][c4] = 2;
+				VWallArray[r4][c0] = 2;
+				VWallArray[r4][c4] = 2;	// botR VWall
 				break;
 			case '9':
-				HWallArray[r0][c0] = 2;	// top HWall
-				HWallArray[r1][c0] = 2;	// mid HWall
-				HWallArray[r2][c0] = 2;	// bot HWall
+				HWallArray[r0][c0] = 2;
+				HWallArray[r0][c1] = 2;	// top HWall
+				HWallArray[r0][c2] = 2;
+				HWallArray[r0][c3] = 2;
+				HWallArray[r1][c1] = 2;
+				HWallArray[r1][c2] = 2;
+				HWallArray[r2][c1] = 2;	// mid HWall
+				HWallArray[r2][c2] = 2;
+				HWallArray[r3][c0] = 2;
+				HWallArray[r3][c1] = 2;
+				HWallArray[r3][c2] = 2;
+				HWallArray[r4][c0] = 2;
+				HWallArray[r4][c1] = 2;	// bot HWall
+				HWallArray[r4][c2] = 2;
+				HWallArray[r4][c3] = 2;
+				HWallArray[r5][c0] = 2;
+				HWallArray[r5][c1] = 2;
+				HWallArray[r5][c2] = 2;
 
-				VWallArray[r0][c0] = 2;	// topL VWall
-				VWallArray[r0][c1] = 2;	// topR VWall
-				VWallArray[r1][c1] = 2;	// botR VWall
+				VWallArray[r0][c0] = 2;
+				VWallArray[r0][c4] = 2;	// topR VWall
+				VWallArray[r1][c0] = 2;
+				VWallArray[r1][c1] = 2;
+				VWallArray[r1][c3] = 2;
+				VWallArray[r1][c4] = 2;
+				VWallArray[r2][c0] = 2;
+				VWallArray[r2][c4] = 2;
+				VWallArray[r3][c3] = 2;
+				VWallArray[r3][c4] = 2;
+				VWallArray[r4][c0] = 2;	// botL VWall
+				VWallArray[r4][c3] = 2;
 				break;
 		}
 	}
@@ -387,34 +624,31 @@ function decideToBuild(edgeNum)
 	var numOfHWalls = (rows-1)*cols;
 	var i, j;
 
-	if(isAvail(edgeNum))
+	if(edgeNum < numOfHWalls)	// HWall
 	{
-		if(edgeNum < numOfHWalls)	// HWall
+		i = Math.floor(edgeNum/cols)+1;
+		j = edgeNum%cols;
+		var topSetParent = findParent(PointsArray[i-1][j]);
+		var botSetParent = findParent(PointsArray[i][j]);
+		if(HWallArray[i][j] !== 2 && (topSetParent.i !== botSetParent.i || topSetParent.j !== botSetParent.j))
 		{
-			i = Math.floor(edgeNum/cols)+1;
-			j = edgeNum%cols;
-			var topSetParent = findParent(PointsArray[i-1][j]);
-			var botSetParent = findParent(PointsArray[i][j]);
-			if(HWallArray[i][j] !== 2 && (topSetParent.i !== botSetParent.i || topSetParent.j !== botSetParent.j))
-			{
-				joinSets(topSetParent, botSetParent);
-				HWallArray[i][j] = 0;
-				updateHRow(i);
-			}
+			joinSets(topSetParent, botSetParent);
+			HWallArray[i][j] = 0;
+			updateHRow(i);
 		}
-		else						// VWall
+	}
+	else						// VWall
+	{
+		edgeNum -= numOfHWalls;
+		i = edgeNum%rows;
+		j = Math.floor(edgeNum/rows)+1;
+		var leftSetParent = findParent(PointsArray[i][j-1]);
+		var rightSetParent = findParent(PointsArray[i][j]);
+		if(VWallArray[i][j] !== 2 && (leftSetParent.i !== rightSetParent.i || leftSetParent.j !== rightSetParent.j))
 		{
-			edgeNum -= numOfHWalls;
-			i = edgeNum%rows;
-			j = Math.floor(edgeNum/rows)+1;
-			var leftSetParent = findParent(PointsArray[i][j-1]);
-			var rightSetParent = findParent(PointsArray[i][j]);
-			if(VWallArray[i][j] !== 2 && (leftSetParent.i !== rightSetParent.i || leftSetParent.j !== rightSetParent.j))
-			{
-				joinSets(leftSetParent, rightSetParent);
-				VWallArray[i][j] = 0;
-				updateVRow(i);
-			}
+			joinSets(leftSetParent, rightSetParent);
+			VWallArray[i][j] = 0;
+			updateVRow(i);
 		}
 	}
 }
@@ -432,7 +666,8 @@ mazeButton.onclick = function()
 		initMaze();
 		makeExits();
 		shuffleExits();
-		initInput();
+		if(inputText.length > 0)
+			initInput();
 		shuffleArray(EdgeIndexArray);
 		for(var i=0; i<EdgeIndexArray.length; i++)
 			decideToBuild(EdgeIndexArray[i]);
@@ -512,5 +747,4 @@ window.onkeyup = function(e)
 				break;
 			}
 		}
-		
 }
