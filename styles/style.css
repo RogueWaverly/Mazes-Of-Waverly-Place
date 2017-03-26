@@ -47,13 +47,14 @@ p, li
 	margin: 0 auto;
 	margin-top: 3px;
 	margin-bottom: 3px;
-	width: 450px;
+	width: 900px;
 	font-size: 16px;
 	line-height: 1.5;
 	font-family: 'Roboto Slab', serif;
 	text-align: center;
+	color: #9999FF;
 }
-p[id="zeroError"]
+p[class="error"]
 {
 	color: red;
 	font-style: italic;
@@ -73,9 +74,26 @@ p[class="mazeRow"]
 	width: 900px;
 	margin: 0 auto;
 	padding: 0px;
+	color: white;
 	font-size: 16px;
 	font-family: 'PT Mono', monospace;
 	line-height: .8;
+}
+
+input
+{
+	font-size: 16px;
+	font-family: 'Roboto Slab', serif;
+	text-align: center;
+	margin-bottom: 5px;
+	padding: 3px;
+	background-color: white;
+	color: black;
+	width: 130px;
+}
+input:focus
+{
+	border-color: #9999FF;
 }
 
 div[id="mazeDiv"]
@@ -129,6 +147,11 @@ button:active
 	color: black;
 	border: 2px solid #9999FF;
 	background-color: #9999FF;
+}
+button:disabled
+{
+	border: 2px solid black;
+	color: black;
 }
 button[class="bigButton"]
 {
