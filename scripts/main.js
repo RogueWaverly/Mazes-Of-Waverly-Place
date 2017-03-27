@@ -290,22 +290,21 @@ function initInput()
 		switch(inputText.charAt(i))
 		{
 			case '0':
-				
 				HWallArray[r0][c1] = 2;	// top HWall
 				HWallArray[r0][c2] = 2;
+				HWallArray[r0][c3] = 2;
 				HWallArray[r1][c0] = 2;
 				HWallArray[r1][c1] = 2;
 				HWallArray[r1][c2] = 2;
-				HWallArray[r1][c3] = 2;
-				HWallArray[r4][c0] = 2;	// bot HWall
-				HWallArray[r4][c1] = 2;
+				HWallArray[r4][c1] = 2;	// bot HWall
 				HWallArray[r4][c2] = 2;
 				HWallArray[r4][c3] = 2;
+				HWallArray[r5][c0] = 2;
 				HWallArray[r5][c1] = 2;
 				HWallArray[r5][c2] = 2;
 
 				VWallArray[r0][c1] = 2;	// topL VWall
-				VWallArray[r0][c3] = 2;	// topR VWall
+				VWallArray[r0][c4] = 2;	// topR VWall
 				VWallArray[r1][c0] = 2;
 				VWallArray[r1][c1] = 2;
 				VWallArray[r1][c3] = 2;
@@ -318,7 +317,7 @@ function initInput()
 				VWallArray[r3][c1] = 2;
 				VWallArray[r3][c3] = 2;
 				VWallArray[r3][c4] = 2;
-				VWallArray[r4][c1] = 2;	// botL VWall
+				VWallArray[r4][c0] = 2;	// botL VWall
 				VWallArray[r4][c3] = 2;	// botR VWall
 				break;
 			case '1':
@@ -378,23 +377,23 @@ function initInput()
 			case '3':
 				HWallArray[r0][c1] = 2;	// top HWall
 				HWallArray[r0][c2] = 2;
+				HWallArray[r0][c3] = 2;
 				HWallArray[r1][c0] = 2;
 				HWallArray[r1][c1] = 2;
 				HWallArray[r1][c2] = 2;
-				HWallArray[r1][c3] = 2;
 				HWallArray[r2][c0] = 2;	// mid HWall
 				HWallArray[r2][c2] = 2;
 				HWallArray[r3][c0] = 2;
 				HWallArray[r3][c2] = 2;
-				HWallArray[r4][c0] = 2;	// bot HWall
-				HWallArray[r4][c1] = 2;
+				HWallArray[r4][c1] = 2;	// bot HWall
 				HWallArray[r4][c2] = 2;
 				HWallArray[r4][c3] = 2;
+				HWallArray[r5][c0] = 2;
 				HWallArray[r5][c1] = 2;
 				HWallArray[r5][c2] = 2;
 
 				VWallArray[r0][c1] = 2;
-				VWallArray[r0][c3] = 2;	// topR VWall
+				VWallArray[r0][c4] = 2;	// topR VWall
 				VWallArray[r1][c0] = 2;
 				VWallArray[r1][c1] = 2;
 				VWallArray[r1][c3] = 2;
@@ -405,7 +404,7 @@ function initInput()
 				VWallArray[r3][c1] = 2;
 				VWallArray[r3][c3] = 2;
 				VWallArray[r3][c4] = 2;
-				VWallArray[r4][c1] = 2;
+				VWallArray[r4][c0] = 2;
 				VWallArray[r4][c3] = 2;	// botR VWall
 				break;
 			case '4':
@@ -481,10 +480,10 @@ function initInput()
 				HWallArray[r3][c2] = 2;
 				HWallArray[r4][c1] = 2;	// bot HWall
 				HWallArray[r4][c2] = 2;
+				HWallArray[r4][c3] = 2;
 				HWallArray[r5][c0] = 2;
 				HWallArray[r5][c1] = 2;
 				HWallArray[r5][c2] = 2;
-				HWallArray[r5][c3] = 2;
 
 				VWallArray[r0][c1] = 2;
 				VWallArray[r0][c4] = 2;	// topR VWall
@@ -497,7 +496,7 @@ function initInput()
 				VWallArray[r3][c3] = 2;
 				VWallArray[r3][c4] = 2;
 				VWallArray[r4][c0] = 2;	// botL VWall
-				VWallArray[r4][c4] = 2;
+				VWallArray[r4][c3] = 2;
 				break;
 			case '7':
 				HWallArray[r0][c0] = 2;	// top HWall
@@ -525,10 +524,10 @@ function initInput()
 				VWallArray[r4][c2] = 2;
 				break;
 			case '8':
-				HWallArray[r0][c0] = 2;
 				HWallArray[r0][c1] = 2;	// top HWall
 				HWallArray[r0][c2] = 2;
 				HWallArray[r0][c3] = 2;
+				HWallArray[r1][c0] = 2;
 				HWallArray[r1][c1] = 2;
 				HWallArray[r1][c2] = 2;
 				HWallArray[r2][c1] = 2;	// mid HWall
@@ -537,12 +536,12 @@ function initInput()
 				HWallArray[r3][c2] = 2;
 				HWallArray[r4][c1] = 2;	// bot HWall
 				HWallArray[r4][c2] = 2;
+				HWallArray[r4][c3] = 2;
 				HWallArray[r5][c0] = 2;
 				HWallArray[r5][c1] = 2;
 				HWallArray[r5][c2] = 2;
-				HWallArray[r5][c3] = 2;
 
-				VWallArray[r0][c0] = 2;
+				VWallArray[r0][c1] = 2;
 				VWallArray[r0][c4] = 2;	// topR VWall
 				VWallArray[r1][c0] = 2;
 				VWallArray[r1][c1] = 2;
@@ -555,13 +554,13 @@ function initInput()
 				VWallArray[r3][c3] = 2;
 				VWallArray[r3][c4] = 2;
 				VWallArray[r4][c0] = 2;
-				VWallArray[r4][c4] = 2;	// botR VWall
+				VWallArray[r4][c3] = 2;	// botR VWall
 				break;
 			case '9':
-				HWallArray[r0][c0] = 2;
 				HWallArray[r0][c1] = 2;	// top HWall
 				HWallArray[r0][c2] = 2;
 				HWallArray[r0][c3] = 2;
+				HWallArray[r1][c0] = 2;
 				HWallArray[r1][c1] = 2;
 				HWallArray[r1][c2] = 2;
 				HWallArray[r2][c1] = 2;	// mid HWall
@@ -577,7 +576,7 @@ function initInput()
 				HWallArray[r5][c1] = 2;
 				HWallArray[r5][c2] = 2;
 
-				VWallArray[r0][c0] = 2;
+				VWallArray[r0][c1] = 2;
 				VWallArray[r0][c4] = 2;	// topR VWall
 				VWallArray[r1][c0] = 2;
 				VWallArray[r1][c1] = 2;
