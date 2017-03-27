@@ -113,13 +113,13 @@ function isInputValid()
 	if(inputText.length > Math.floor(colMax/(chW+1))-1)
 		return false;
 	for(var i=0; i<inputText.length; i++)
-		if(!(inputText.charAt(i)>='0' && inputText.charAt(i)<='9') && !(inputText.charAt(i)>='A' && inputText.charAt(i)<='Z'))
+		if(!(inputText.charAt(i)>='0' && inputText.charAt(i)<='9') && /*!(inputText.charAt(i)>='A' && inputText.charAt(i)<='Z') &&*/ inputText.charAt(i) !== ' ')
 			return false;
 	return true;
 }
 function displayInputError()
 {
-	document.getElementById('mazeDiv').innerHTML = "<p class='error'>Input should only contain letters and digits and have at most " + (Math.ceil(colMax/(chW+1))-1) + " characters.</p>";
+	document.getElementById('mazeDiv').innerHTML = "<p class='error'>Input should only contain digits and have at most " + (Math.ceil(colMax/(chW+1))-1) + " characters.</p>";
 }
 
 // Display Maze
@@ -325,10 +325,8 @@ function initInput()
 				HWallArray[r0][c2] = 2;
 				HWallArray[r1][c1] = 2;
 				HWallArray[r2][c1] = 2;
-				HWallArray[r4][c0] = 2;	// bot HWall
-				HWallArray[r4][c1] = 2;
+				HWallArray[r4][c1] = 2;	// bot HWall
 				HWallArray[r4][c3] = 2;
-				HWallArray[r5][c0] = 2;
 				HWallArray[r5][c1] = 2;
 				HWallArray[r5][c2] = 2;
 				HWallArray[r5][c3] = 2;
@@ -341,7 +339,7 @@ function initInput()
 				VWallArray[r2][c3] = 2;
 				VWallArray[r3][c2] = 2;
 				VWallArray[r3][c3] = 2;
-				VWallArray[r4][c0] = 2;
+				VWallArray[r4][c1] = 2;
 				VWallArray[r4][c4] = 2;	// botR VWall
 				break;
 			case '2':
@@ -509,18 +507,22 @@ function initInput()
 				HWallArray[r1][c0] = 2;
 				HWallArray[r1][c1] = 2;
 				HWallArray[r1][c2] = 2;
-				HWallArray[r5][c3] = 2;
+				HWallArray[r2][c2] = 2;
+				HWallArray[r2][c3] = 2;
+				HWallArray[r3][c1] = 2;
+				HWallArray[r3][c2] = 2;
+				HWallArray[r5][c1] = 2;
 
 				VWallArray[r0][c0] = 2;	// topR VWall
 				VWallArray[r0][c4] = 2;
 				VWallArray[r1][c3] = 2;	// botR VWall
 				VWallArray[r1][c4] = 2;
+				VWallArray[r2][c2] = 2;
 				VWallArray[r2][c3] = 2;
-				VWallArray[r2][c4] = 2;
-				VWallArray[r3][c3] = 2;
-				VWallArray[r3][c4] = 2;
-				VWallArray[r4][c3] = 2;
-				VWallArray[r4][c4] = 2;
+				VWallArray[r3][c1] = 2;
+				VWallArray[r3][c2] = 2;
+				VWallArray[r4][c1] = 2;
+				VWallArray[r4][c2] = 2;
 				break;
 			case '8':
 				HWallArray[r0][c0] = 2;
@@ -653,7 +655,7 @@ function decideToBuild(edgeNum)
 	}
 }
 
-mazeButton.onclick = function()
+function makeMaze()
 {
 	if(!isInputValid())
 	{
@@ -675,13 +677,22 @@ mazeButton.onclick = function()
 	}
 }
 
+mazeButton.onclick = function()
+{
+	makeMaze();
+}
+
 // Play Maze
 
 window.onkeyup = function(e)
 {
 	var key = e.keyCode ? e.keyCode : e.which;
 	e.preventDefault();
-	if(isPlaying)
+	if(key == 13)
+	{
+		makeMaze();
+	}
+	else if(isPlaying)
 		switch(key)
 		{
 			case 65:
